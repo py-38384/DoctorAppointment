@@ -1,0 +1,58 @@
+table           { border-collapse:collapse } /* Ensure no space between cells   */
+tr.strikeout td { position:relative        } /* Setup a new coordinate system   */
+tr.strikeout td:before {                     /* Create a new element that       */
+  content: " ";                              /* …has no text content            */
+  position: absolute;                        /* …is absolutely positioned       */
+  left: 0; top: 50%; width: 100%;            /* …with the top across the middle */
+  border-bottom: 1px solid #000;             /* …and with a border on the top   */
+}
+/* td{
+  cursor: pointer;
+} */
+body{
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+td:hover{
+  background-color: rgb(170, 170, 170);
+  color: white;
+}
+td input{
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+td{
+  cursor: pointer;
+}
+td span{
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+footer{
+  background-color: gray;
+  position: relative;
+  width: 100%;
+  bottom: -17px;
+}
+footer p{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  color: white;
+}
+.doctor-image img{
+  width: 220px;
+}
+.error-message{
+  color: rgb(240,40,40);
+  font-size: 14px; 
+  margin-top: 10px;
+}
