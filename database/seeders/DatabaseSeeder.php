@@ -17,36 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-
-        $departmentList = [
-            "Neurologists",
-            "Cardiology",
-            "Dermatologist",
-            "Gastroenterologist",
-            "General surgery",
-            "Oncologist",
-            "Endocrinologist",
-            "Hematology",
-            "Ophthalmology",
-            "Paediatrics",
-            "ENT",
-            "Internal medicine",
-            "Nephrologist",
-            "Anaesthesia",
-            "Infectious Disease Specialist",
-            "Liver specialist",
-            "Radiologist",
-            "Urologist",
-            "Allergist",
-            "Cardiac surgery",
-            "Emergency medicine",
-            "Geriatric Medicine specialists",
-            "Pulmonology",
-            "Osteopath",
-        ];
-        foreach ($departmentList as $department) {
-            Department::create(["name" => $department]);
-        }
+        $this->call(DepartmentSeeder::class);
         Doctor::factory(10)->create();
         Appointment::factory(100)->create();
     }

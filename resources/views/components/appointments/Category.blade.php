@@ -1,0 +1,11 @@
+<option value="" selected>All</option>
+<option value="doctor">Doctor</option>
+<option value="department">Department</option>
+<option value="date">Date</option>
+<option value="appointment_number">Appointment Number</option>
+<option value="patient_name">Patient Name</option>
+<option value="patient_phone">Patient Phone</option>
+<option value="total_fee">Total Fee</option>
+<option value="paid_amount">Paid Amount</option>
+<option value="check" >Check</option>
+<option value="uncheck" >Uncheck</option>

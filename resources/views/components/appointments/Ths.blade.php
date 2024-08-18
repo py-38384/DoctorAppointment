@@ -1,0 +1,9 @@
+<th scope="col">No</th>
+<th scope="col">Date</th>
+<th scope="col">Doctor</th>
+<th scope="col">Patient Name</th>
+<th scope="col">Patient Phone</th>
+<th scope="col">Total Fee</th>
+<th scope="col">Paid Amount</th>
+<th scope="col">Check</th>
+<th scope="col">Options</th>

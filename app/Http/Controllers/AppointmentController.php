@@ -50,40 +50,138 @@ class AppointmentController extends Controller
                     ]);
                 }
                 if($q_category == "date"){
-
+                    if($q == "today"){
+                        $appointments = Appointment::whereDate('appointment_date','=',Carbon::today()->toDateString())
+                        ->with('doctor')
+                        ->orderBy('appointment_date', 'asc')
+                        ->paginate(10);
+                        dd($appointments);
+                        return view('welcome',[
+                            'appointments' => $appointments,
+                            'q' => $q,
+                            'category' => $q_category
+                        ]);
+                    }
+                    elseif($q == "tomorrow"){
+                        $appointments = Appointment::whereDate('appointment_date','=',Carbon::tomorrow()->toDateString())
+                        ->with('doctor')
+                        ->orderBy('appointment_date', 'asc')
+                        ->paginate(10);
+                        return view('welcome',[
+                            'appointments' => $appointments,
+                            'q' => $q,
+                            'category' => $q_category
+                        ]);
+                    }
+                    elseif($q == "yesterday"){
+                        $appointments = Appointment::whereDate('appointment_date','=',Carbon::yesterday()->toDateString())
+                        ->with('doctor')
+                        ->orderBy('appointment_date', 'asc')
+                        ->paginate(10);
+                        return view('welcome',[
+                            'appointments' => $appointments,
+                            'q' => $q,
+                            'category' => $q_category
+                        ]);
+                    }
+                    else{
+                        try {
+                            $appointments = Appointment::whereDate('appointment_date','=',Carbon::parse($q))
+                            ->with('doctor')
+                            ->orderBy('appointment_date', 'asc')
+                            ->paginate(10);
+                            return view('welcome',[
+                                'appointments' => $appointments,
+                                'q' => $q,
+                                'category' => $q_category
+                            ]);
+                        } catch (\Throwable $th) {
+                            return view('welcome',[
+                                'q' => $q,
+                                'category' => $q_category
+                            ]);
+                        }
+                    }
                 }
                 if($q_category == "appointment_number"){
-
+                    $appointments_no = (int)$q;
+                    if($appointments_no > 0){
+                        $appointments = Appointment::where("appointment_no","=", $appointments_no)
+                        ->with('doctor')
+                        ->orderBy('appointment_date', 'asc')
+                        ->paginate(10);
+                        return view('welcome',[
+                            'appointments' => $appointments,
+                            'q' => $q,
+                            'category' => $q_category
+                        ]);
+                    }
+                    else{
+                        return view('welcome',[
+                            'q' => $q,
+                            'category' => $q_category
+                        ]);
+                    }
                 }
                 if($q_category == "patient_name"){
-
+                    $appointments = Appointment::where("patient_name",'LIKE', '%' . $q . '%')
+                    ->with('doctor')
+                    ->orderBy('appointment_date', 'asc')
+                    ->paginate(10);
+                    return view('welcome',[
+                        'appointments' => $appointments,
+                        'q' => $q,
+                        'category' => $q_category
+                    ]);
                 }
                 if($q_category == "total_fee"){
-
+                    $appointments = Appointment::where("total_fee","=", $q)
+                    ->with('doctor')
+                    ->orderBy('appointment_date', 'asc')
+                    ->paginate(10);
+                    return view('welcome',[
+                        'appointments' => $appointments,
+                        'q' => $q,
+                        'category' => $q_category
+                    ]);
                 }
                 if($q_category == "paid_amount"){
-
+                    $appointments = Appointment::where("paid_amount","=", $q)
+                    ->with('doctor')
+                    ->orderBy('appointment_date', 'asc')
+                    ->paginate(10);
+                    return view('welcome',[
+                        'appointments' => $appointments,
+                        'q' => $q,
+                        'category' => $q_category
+                    ]);
+                }
+                if($q_category == "check"){
+                    return back()->with('message',"Please clear the search query before <b>check</b> search");
+                }
+                if($q_category == "uncheck"){
+                    return back()->with('message',"Please clear the search query before <b>uncheck</b> search");
                 }
             }
             
             $appointments = Appointment::
                             where('appointment_no', 'LIKE', '%' . $q . '%')
-                                ->orWhere('appointment_date','LIKE', '%' . $q .'%')
-                                ->orWhereHas('doctor', function ($q_obj) use ($q){
-                                    $q_obj->where('name','LIKE', '%' . $q .'%');
-                                })
-                                ->orwhereHas('doctor', function ($q_obj) use ($q) {
-                                    $q_obj->whereHas('department', function($q_obj) use ($q){
-                                        $q_obj->where('name','LIKE', '%' . $q . '%');
-                                    });
-                                })
-                                ->orWhere('patient_name', 'LIKE', '%' . $q . '%')
-                                ->orWhere('patient_phone', 'LIKE', '%' . $q . '%')
-                                ->orWhere('paid_amount', 'LIKE', '%' . $q . '%')
-                                ->orWhere('total_fee', 'LIKE', '%' . $q . '%')
-                                ->with('doctor')
-                                ->orderBy('appointment_date', 'asc')
-                                ->paginate(10);
+                            ->orWhere('appointment_date','LIKE', '%' . $q .'%')
+                            ->orWhereHas('doctor', function ($q_obj) use ($q){
+                                $q_obj->where('name','LIKE', '%' . $q .'%');
+                            })
+                            ->orwhereHas('doctor', function ($q_obj) use ($q) {
+                                $q_obj->whereHas('department', function($q_obj) use ($q){
+                                    $q_obj->where('name','LIKE', '%' . $q . '%');
+                                });
+                            })
+                            ->orWhere('patient_name', 'LIKE', '%' . $q . '%')
+                            ->orWhere('patient_phone', 'LIKE', '%' . $q . '%')
+                            ->orWhere('paid_amount', 'LIKE', '%' . $q . '%')
+                            ->orWhere('total_fee', 'LIKE', '%' . $q . '%')
+                            ->with('doctor')
+                            ->orderBy('appointment_date', 'asc')
+                            ->paginate(10);
             return view('welcome',[
                 'appointments' => $appointments,
                 'q' => $q,
@@ -149,7 +247,7 @@ class AppointmentController extends Controller
         $formFields["doctor_id"] = $request->doctor;
         $formFields["total_fee"] = Doctor::find($request->doctor)->fee;
         $appointments = Appointment::whereDate('created_at', Carbon::today())->get();
-        $appointment_no = 0;
+        $appointment_no = 1;
         foreach( $appointments as $appointment ){
             if($appointment->appointment_no > $appointment_no){
                 $appointment_no = $appointment->appointment_no;

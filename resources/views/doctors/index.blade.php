@@ -4,15 +4,7 @@
         <a class="d-block btn btn-primary m-2" href="/doctors/create"><i class='bx bx-plus' ></i></a>
     </div>
     <div>
-        @foreach ($doctors as $doctor)
-            <x-Modal 
-                id="{{$doctor->id}}" 
-                modalTitle="Delete <b>{{$doctor->name}}</b>" 
-                modalBody="Are you really want to delete record of doctor <b>{{$doctor->name}}</b>" 
-                formAction="/doctors/{{$doctor->id}}"
-            />
-            <x-doctors.Card :doctor="$doctor" />
-        @endforeach
+        <x-doctors.ModalsAndCards :doctors="$doctors"/>
     </div>
     <div>
         {{$doctors->withQueryString()->links()}}
